@@ -91,10 +91,10 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           path: /tmp
-      - run: docker load -i /tmp/multi-docker-client.tar
-      - run: docker load -i /tmp/multi-docker-nginx.tar
-      - run: docker load -i /tmp/multi-docker-server.tar
-      - run: docker load -i /tmp/multi-docker-worker.tar
+      - run: docker load -i /tmp/multi-docker-client/multi-docker-client.tar
+      - run: docker load -i /tmp/multi-docker-nginx/multi-docker-nginx.tar
+      - run: docker load -i /tmp/multi-docker-server/multi-docker-server.tar
+      - run: docker load -i /tmp/multi-docker-worker/multi-docker-worker.tar
       - run: docker push arch23/multi-docker-client
       - run: docker push arch23/multi-docker-nginx
       - run: docker push arch23/multi-docker-server
