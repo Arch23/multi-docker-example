@@ -20,13 +20,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: docker build ./client -t arch23/multi-docker-client -o type=docker,dest=/tmp/multi-docker-client.tar
-  
-  # Build-nginx:
-  #   name: Build-nginx
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - run: docker build ./nginx -t arch23/multi-docker-nginx
+      - uses: actions/cache@v2
+        env:
+          cache-name: client-docker
+        with:
+          path: /tmp/multi-docker-client.tar
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+  Build-nginx:
+    name: Build-nginx
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker build ./nginx -t arch23/multi-docker-nginx -o type=docker,dest=/tmp/multi-docker-nginx.tar
+      - uses: actions/cache@v2
+        env:
+          cache-name: nginx-docker
+        with:
+          path: /tmp/multi-docker-nginx.tar
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
 
   # Build-server:
   #   name: Build-server
@@ -42,10 +54,25 @@ jobs:
   #     - uses: actions/checkout@v2
   #     - run: docker build ./worker -t arch23/multi-docker-worker
 
-  # DockerHub-upload:
-  #   name: Docker-login
-  #   needs: [Build-client, Build-nginx, Build-server, Build-worker]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - run: echo "${{ secrets.DOCKER_PWD }}" | docker login -u "${{ secrets.DOCKER_ID }}" --password-stdin
+  DockerHub-upload:
+    name: Docker-login
+    needs: [Build-client, Build-nginx, Build-server, Build-worker]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ secrets.DOCKER_PWD }}" | docker login -u "${{ secrets.DOCKER_ID }}" --password-stdin
+      - uses: actions/cache@v2
+        env:
+          cache-name: client-docker
+        with:
+          path: /tmp/multi-docker-client.tar
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+      - uses: actions/cache@v2
+        env:
+          cache-name: nginx-docker
+        with:
+          path: /tmp/multi-docker-nginx.tar
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+      - run: ls /tmp
+      - run: docker load --input /tmp/multi-docker-client.tar
+      - run: docker image ls -a
 
