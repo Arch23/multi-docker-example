@@ -4,13 +4,13 @@ on:
     branches:
       - master
 
-  jobs:
-    Tests:
-      name: Tests 
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - run: docker build -f ./client/Dockerfile.dev ./client -t arch23/multi-docker-example
-        - run: docker run -e CI=true arch23/multi-docker-example npm run test
-        - run: echo 'PASSED TESTS?'
+jobs:
+  Tests:
+    name: Tests 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker build -f ./client/Dockerfile.dev ./client -t arch23/multi-docker-example
+      - run: docker run -e CI=true arch23/multi-docker-example npm run test
+      - run: echo 'PASSED TESTS?'
 
