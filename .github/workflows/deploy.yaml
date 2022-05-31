@@ -11,6 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: docker build -f ./client/Dockerfile.dev ./client -t arch23/multi-docker-example
-      - run: docker run -e CI=true arch23/multi-docker-example npm run test
-      - run: echo 'PASSED TESTS?'
+      - run: docker run -e CI=true arch23/multi-docker-example npm run test      
 
+  Build:
+    name: Build
+    needs: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'PASSED TESTS'
