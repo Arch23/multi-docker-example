@@ -56,7 +56,7 @@ jobs:
 
   DockerHub-upload:
     name: Docker-login
-    needs: [Build-client, Build-nginx, Build-server, Build-worker]
+    needs: [Build-client, Build-nginx]
     runs-on: ubuntu-latest
     steps:
       - run: echo "${{ secrets.DOCKER_PWD }}" | docker login -u "${{ secrets.DOCKER_ID }}" --password-stdin
