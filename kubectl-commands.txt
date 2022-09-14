@@ -1,0 +1,8 @@
+kubectl apply -f k8s
+kubectl get deployments
+kubectl get pods
+kubectl get services
+kubectl get pv
+kubectl delete -f k8s
+kubectl create secret generic pgpassword --from-literal PGPASSWORD=password123
+kubectl get secrets
